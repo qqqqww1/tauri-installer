@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <g id="许可信息">
+    <path d="M15 0C16.6571 0 18 1.34292 18 3L18 15C18 16.6571 16.6571 18 15 18L3 18C1.34292 18 0 16.6571 0 15L0 3C0 1.34292 1.34292 0 3 0L15 0Z" id="矩形" fill="#FF5252" stroke="none" />
+    <g id="编组" transform="translate(5.7272763 5.7272763)">
+      <path d="M4.76837e-07 7.07107L7.07107 0" id="线条" fill="none" fill-rule="evenodd" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M0 9.53674e-07L7.07107 7.07108" id="线条" fill="none" fill-rule="evenodd" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+</svg>

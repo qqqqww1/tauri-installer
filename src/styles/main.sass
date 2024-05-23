@@ -1,0 +1,59 @@
+
+.slide-enter-active, .slide-leave-active
+    transition: all 0.5s ease
+.slide-enter-to, .slide-leave-from
+    opacity: 1
+    transform: translate3d(0, 0, 0)
+.slide-leave-to
+    opacity: 0
+    transform: translate3d(30%, 0, 0)
+.slide-enter-from
+    opacity: 0
+    transform: translate3d(-5%, 0, 0)
+
+.custom-scroll
+    
+  @scrollbar 
+    width: 8px
+    height: 8px
+    background-color: #d3d3d3
+    border-radius: 4px
+    @thumb 
+      background-color: #a5a5a5
+      border-radius: 4px
+  overflow: auto
+
+.q-dialog__inner 
+  flex-flow: row nowrap !important
+  width: 100% !important
+  justify-content: flex-end !important
+
+@keyframes from-right
+  from 
+    margin-right: -100%
+  
+  to 
+    margin-right: 0
+  
+
+.animate-from-right
+  animation: from-right 0.3s ease-in-out 1
+.terminal
+  height: 100%
+
+  .xterm-viewport
+    // 自定义滚动条
+    &::-webkit-scrollbar
+      position: absolute
+      top: 0
+      width: 4px
+      height: 8px
+      background-color: rgba(0,0,0,0.2)
+      border-radius: 4px
+      &-thumb
+        background-color: #3a89ff
+        border-radius: 8px
+
+html
+  // 隐藏滚动条
+  overflow: hidden
