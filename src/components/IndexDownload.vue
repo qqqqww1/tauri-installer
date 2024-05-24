@@ -1,11 +1,7 @@
 <template>
-  <div flex="~ col nowrap" class="w-300px flex-center">
+  <div flex="~ col nowrap" class="w-450px mt-6 flex-center">
     <template v-if="progress < 1">
-      <q-linear-progress
-        color="green"
-        :value="progress * 100"
-        class="w-full !h-6 rounded-xl"
-      />
+      <q-linear-progress color="green" :value="progress" class="w-full !h-4 rounded-xl" />
 
       <div class="text-center mt-4">下载中... {{ (progress * 100).toFixed(0) }}%</div>
     </template>
@@ -14,20 +10,19 @@
         <div class="i-mdi:check-circle text-green-500 mr-2" />
         下载完成
       </div>
-      <div class="mt-4">请在弹出的窗口中进行手动安装</div>
+      <div class="mt-2">请在弹出的窗口中进行手动安装</div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import { invoke } from "@tauri-apps/api/tauri";
-import { appDataDir } from "@tauri-apps/api/path";
-import { open } from "@tauri-apps/api/shell";
 import { listen } from "@tauri-apps/api/event";
 
-const DOWNLOAD_URL = "https://www.baidu.com";
+const store = useConfigStore()
+const DOWNLOAD_URL = store.info.AppUrl
 
-async function downloadFile() {
+async function downloadFile () {
   const path = `software.dmg`;
 
   const downloadPromise = invoke("download_file_custom", {
@@ -36,7 +31,7 @@ async function downloadFile() {
   });
   const unlisten = await listen("DOWNLOAD_PROGRESS", (event) => {
     const progress = (event.payload as any).percentage as number;
-    console.log(`Downloaded ${(progress * 100).toFixed(2)}%`);
+    // console.log(`Downloaded ${(progress * 100).toFixed(2)}%`);
     updateProgressBar(progress);
   });
 
@@ -59,7 +54,7 @@ async function downloadFile() {
 }
 
 const progress = ref(0);
-function updateProgressBar(value: number) {
+function updateProgressBar (value: number) {
   progress.value = value;
 }
 

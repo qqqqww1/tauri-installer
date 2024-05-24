@@ -93,25 +93,41 @@ async fn download_file_custom(app: AppHandle, url: String, path: String) -> Resu
     let mut downloaded: u64 = 0;
     let mut stream = res.bytes_stream();
 
-    while let Some(item) = stream.next().await {
-        let chunk = item.or(Err(format!("下载 `{}` 文件失败", &path)))?;
-        file.write(&chunk)
-            .or(Err(format!("写入 `{}` 文件失败", &path)))?;
-        downloaded = std::cmp::min(downloaded + (chunk.len() as u64), total_size);
-        let duration = start_time.elapsed().as_secs_f64();
-        let speed = if duration > 0.0 {
-            Some(downloaded as f64 / duration / 1024.0 / 1024.0)
+    let mut count = 0;
+    loop {
+        let item_result = stream.next().await;
+        if let Some(item) = item_result {
+            let chunk = item.or_else(|err| {
+                println!("下载 `{}` 文件失败: {}", &path, err);
+                Err(format!("下载 `{}` 文件失败", &path))
+            })?;
+
+            if let Err(err) = file.write(&chunk) {
+                println!("写入 `{}` 文件失败: {}", &path, err);
+                return Err(format!("写入 `{}` 文件失败", &path));
+            }
+
+            downloaded = std::cmp::min(downloaded + (chunk.len() as u64), total_size);
+            progress.transfered = downloaded;
+            progress.percentage = downloaded as f64 / total_size as f64;
+
+            // 尝试发送进度更新,如果失败则打印错误信息
+            count += 1;
+            if (count % 30 == 29) {
+                progress.emit_progress(&app.app_handle());
+            }
+
+            println!("downloaded => {}", downloaded);
+            println!("total_size => {}", total_size);
         } else {
-            None
-        };
-        progress.transfered = downloaded;
-        progress.transfer_rate = speed.unwrap_or(0.0);
-        progress.percentage = downloaded as f64 / total_size as f64;
-        progress.emit_progress(&app.app_handle());
-        println!("downloaded => {}", downloaded);
-        println!("total_size => {}", total_size);
-        println!("speed => {:?}", speed);
+            break;
+        }
     }
+
+    // wait 2s
+    std::thread::sleep(std::time::Duration::from_secs(2));
+
+    progress.emit_finished(&app.app_handle());
 
     return Ok(());
 }

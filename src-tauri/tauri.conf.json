@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "Tauri Vue Template",
+    "productName": "LabVIEW Installers",
     "version": "0.4.0"
   },
   "build": {
@@ -13,14 +13,8 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "net.uninen.dev",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
+      "identifier": "cc.polars.installer",
+      "icon": ["icons/logo.png"],
       "resources": [],
       "externalBin": [],
       "copyright": "",
@@ -52,21 +46,30 @@
         "all": true,
         "request": true,
         "scope": ["http://*", "https://*"]
+      },
+      "shell": {
+        "all": true,
+        "scope": [
+          {
+            "name": "pkgutil",
+            "cmd": "pkgutil",
+            "args": ["--pkgs"]
+          }
+        ]
       }
     },
     "windows": [
       {
-        "title": "Tauri Vue Template",
-        "width": 800,
-        "height": 600,
-        "minWidth": 800,
-        "minHeight": 600,
-        "maxWidth": 1000,
-        "maxHeight": 700,
+        "title": "LabVIEW Installer",
+        "width": 600,
+        "height": 450,
+        "minWidth": 600,
+        "minHeight": 450,
+        "maxWidth": 800,
+        "maxHeight": 600,
         "resizable": true,
         "fullscreen": false,
-        "decorations": false,
-        "titleBarStyle": "Transparent"
+        "decorations": true
       }
     ],
     "security": {
