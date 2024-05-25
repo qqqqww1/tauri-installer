@@ -145,13 +145,27 @@ async fn install_dmg(app: AppHandle, path: &str) -> Result<(), String> {
     Ok(())
 }
 
+#[tauri::command]
+async fn delete_file(app: AppHandle, path: &str) -> Result<(), String> {
+    let dir = app
+        .path_resolver()
+        .app_data_dir()
+        .expect("Failed to get data dir");
+    let file_path = dir.join(&path);
+    if let Err(err) = fs::remove_file(file_path) {
+        return Err(format!("Failed to delete file: {}", err).into());
+    }
+    Ok(())
+}
+
 fn main() {
     let ctx = tauri::generate_context!();
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             machine_uid::get_machine_uid,
             download_file_custom,
-            install_dmg
+            install_dmg,
+            delete_file
         ])
         .setup(|_app| {
             #[cfg(debug_assertions)]
