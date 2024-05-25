@@ -1,13 +1,17 @@
 <template>
-  <div flex="~ col nowrap" class="w-450px mt-6 flex-center">
+  <div flex="~ col nowrap" class="w-300px mt-6 text-1rem flex-center">
     <template v-if="progress < 1">
-      <q-linear-progress color="green" :value="progress" class="w-full !h-4 rounded-xl" />
+      <q-linear-progress
+        style="background-color: #00cb87"
+        :value="progress"
+        class="w-full !h-4 rounded-xl"
+      />
 
       <div class="text-center mt-4">下载中... {{ (progress * 100).toFixed(0) }}%</div>
     </template>
     <template v-else>
       <div class="flex items-center">
-        <div class="i-mdi:check-circle text-green-500 mr-2" />
+        <div style="color: #03b585" class="i-mdi:check-circle text-green-500 mr-2" />
         下载完成
       </div>
       <div class="mt-2">请在弹出的窗口中进行手动安装</div>
@@ -19,10 +23,10 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { listen } from "@tauri-apps/api/event";
 
-const store = useConfigStore()
-const DOWNLOAD_URL = store.info.AppUrl
+const store = useConfigStore();
+const DOWNLOAD_URL = store.info.AppUrl;
 
-async function downloadFile () {
+async function downloadFile() {
   const path = `software.dmg`;
 
   const downloadPromise = invoke("download_file_custom", {
@@ -54,7 +58,7 @@ async function downloadFile () {
 }
 
 const progress = ref(0);
-function updateProgressBar (value: number) {
+function updateProgressBar(value: number) {
   progress.value = value;
 }
 
