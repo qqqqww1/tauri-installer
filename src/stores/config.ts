@@ -3,6 +3,8 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import moment from 'moment'
 import { Notify } from 'quasar'
+import { Command } from '@tauri-apps/api/shell'
+const command = new Command('pkgutil')
 
 type Info = {
   AppUrl: string
@@ -85,6 +87,30 @@ export const useConfigStore = defineStore('config', () => {
   const serverUrl = useStorage('serverUrl', 'http://154.3.1.68:100')
   const install = ref(false)
   const installed = useStorage('installed', false)
+
+  const checkIsInstalled = async () => {
+    const result = await new Promise<string>((resolve) => {
+      const output = [] as string[]
+      command.on('close', (code) => {
+        resolve(output.join('\n'))
+      })
+      command.on('error', (err) => {
+        console.error('Failed to execute command:', err)
+        resolve('')
+      })
+      command.stdout.on('data', (data) => {
+        output.push(data)
+      })
+      command.spawn()
+    })
+
+    console.log('result:', result)
+    const isInstalled = result.toLowerCase().includes('com.ni.labviewcore_x64_230')
+
+    console.log('isInstalled:', isInstalled)
+    installed.value = isInstalled
+    return isInstalled
+  }
   return {
     code,
     info,
@@ -95,6 +121,7 @@ export const useConfigStore = defineStore('config', () => {
     checkSync,
     serverUrl,
     install,
-    installed
+    installed,
+    checkIsInstalled
   }
 })

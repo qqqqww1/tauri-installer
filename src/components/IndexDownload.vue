@@ -1,20 +1,22 @@
 <template>
   <div flex="~ col nowrap" class="w-300px mt-6 text-1rem flex-center">
     <template v-if="progress < 1">
-      <q-linear-progress
-        style="background-color: #00cb87"
-        :value="progress"
-        class="w-full !h-4 rounded-xl"
-      />
+      <q-linear-progress style="background-color: #00cb87" :value="progress" class="w-full !h-4 rounded-xl" />
 
       <div class="text-center mt-4">下载中... {{ (progress * 100).toFixed(0) }}%</div>
     </template>
-    <template v-else>
+    <template v-else-if="!successInstall">
       <div class="flex items-center">
         <div style="color: #03b585" class="i-mdi:check-circle text-green-500 mr-2" />
         下载完成
       </div>
       <div class="mt-2">请在弹出的窗口中进行手动安装</div>
+    </template>
+    <template v-else>
+      <div class="flex items-center">
+        <div style="color: #03b585" class="i-mdi:check-circle text-green-500 mr-2" />
+        安装完成
+      </div>
     </template>
   </div>
 </template>
@@ -26,7 +28,7 @@ import { listen } from "@tauri-apps/api/event";
 const store = useConfigStore();
 const DOWNLOAD_URL = store.info.AppUrl;
 
-async function downloadFile() {
+async function downloadFile () {
   const path = `software.dmg`;
 
   const downloadPromise = invoke("download_file_custom", {
@@ -49,6 +51,7 @@ async function downloadFile() {
 
   try {
     await downloadPromise;
+    startWaitInstallSuccess()
     await invoke("install_dmg", { path });
   } catch (err) {
     console.error("Failed to download or install DMG file:", err);
@@ -58,7 +61,7 @@ async function downloadFile() {
 }
 
 const progress = ref(0);
-function updateProgressBar(value: number) {
+function updateProgressBar (value: number) {
   progress.value = value;
 }
 
@@ -71,4 +74,25 @@ function updateProgressBar(value: number) {
 // }
 
 onMounted(downloadFile);
+
+const successInstall = ref(false);
+function startWaitInstallSuccess () {
+  const interval = setInterval(async () => {
+    const result = await store.checkIsInstalled()
+    if (result) {
+      clearInterval(interval);
+      successInstall.value = true;
+    }
+  }, 4000);
+}
+
+// 安装成功后删除下载的文件，并卸载 dmg文件
+import { Command } from "@tauri-apps/api/shell";
+whenever(successInstall, () => {
+  invoke("delete_file", { path: "software.dmg" });
+  const command = new Command("hdiutil", ["detach", "\"/Volumes/LabVIEW 2023 Q3 Pro\""]);
+  command.execute().then((result) => {
+    console.log("卸载结果:", result);
+  });
+});
 </script>

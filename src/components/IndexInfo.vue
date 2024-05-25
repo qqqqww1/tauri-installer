@@ -9,12 +9,12 @@
     </div>
     <div v-if="showExitBtn || isExpire">
       <q-btn unelevated style="background-color: rgb(252, 72, 81) !important"
-        class="!rounded-xl !font-bold !px-8 !text-lg !min-h-8 mt-2" text-color="white" label="停用许可证" ref="changeBtn"
+        class="!rounded-xl !font-bold !px-8 !text-1.1rem !min-h-8 mt-2" text-color="white" label="停用许可证" ref="changeBtn"
         @click.stop="store.code = ''" />
     </div>
     <div v-else-if="showRefreshBtn">
-      <q-btn unelevated class="!rounded-xl !font-bold !text-lg !min-h-8  bg-green-custom !px-8 mt-2" text-color="white"
-        label="刷新许可证信息" ref="changeBtn" @click.stop="toRefresh" />
+      <q-btn unelevated class="!rounded-xl !font-bold !text-1.1rem !min-h-8  bg-green-custom !px-8 mt-2"
+        text-color="white" label="刷新许可证信息" ref="changeBtn" @click.stop="toRefresh" />
     </div>
 
     <div class="mt-3 text-lg">
@@ -85,30 +85,11 @@ function toRefresh () {
   });
 }
 
-// exec pkgutil --pkgs | grep -i LabView
-import { Command } from '@tauri-apps/api/shell';
-const command = new Command('pkgutil');
-
 setTimeout(async () => {
   if (!isExpire.value && store.code) {
-    const result = await new Promise<string>((resolve) => {
-      const output = [] as string[];
-      command.on('close', (code) => {
-        resolve(output.join('\n'));
-      });
-      command.on('error', (err) => {
-        console.error('Failed to execute command:', err);
-        resolve('');
-      });
-      command.stdout.on('data', (data) => {
-        output.push(data);
-      });
-      command.spawn();
-    });
-
-    console.log('result:', result);
-    const isInstalled = result.toLowerCase().includes('labview');
-    store.install = !isInstalled;
+    // check if installed
+    // if not, switch to install page
+    store.install = !(await store.checkIsInstalled())
   }
 }, 3000);
 </script>

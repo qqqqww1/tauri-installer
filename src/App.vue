@@ -13,9 +13,9 @@
 
       <div class="flex flex-nowrap items-center mb-6 mt-10 text">
         <q-img :src="LabView" class="!w-70px mr-3" no-spinner no-transition />
-        <div class="text-48px leading-48px flex items-start">
+        <div class="text-45px leading-45px flex items-start">
           {{ appInfo?.name || 'LabVIEW' }}
-          <div class="text-sm pt-1 font-bold">TM</div>
+          <div class="text-0.6rem leading-4 pt-1 font-bold">TM</div>
         </div>
       </div>
       <div class="text-lg font-bold text flex flex-col flex-nowrap">
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="p-4 pt-5 text-sm bg-light-500 font-bold text" v-if="appInfo?.AppMsg" data-tauri-drag-region>
+    <div class="p-4 pt-5 text-0.8rem bg-light-500 font-bold text" v-if="appInfo?.AppMsg" data-tauri-drag-region>
       <div v-html="appInfo.AppMsg.split('\\n').join('<br />')" data-tauri-drag-region />
     </div>
   </div>

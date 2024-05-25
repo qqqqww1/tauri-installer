@@ -54,6 +54,10 @@
             "name": "pkgutil",
             "cmd": "pkgutil",
             "args": ["--pkgs"]
+          },
+          {
+            "name": "hdiutil",
+            "cmd": "hdiutil"
           }
         ]
       }
