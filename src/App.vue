@@ -43,6 +43,7 @@ const appInfo = computedAsync(getInfo, cacheAppInfo.value)
 whenever(appInfo, (value) => {
   cacheAppInfo.value = value
 })
+provide('appInfo', appInfo)
 
 const configStore = useConfigStore()
 configStore.checkSync()

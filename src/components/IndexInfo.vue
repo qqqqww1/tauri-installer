@@ -1,7 +1,7 @@
 <template>
   <div flex="~ col nowrap" @click.right="isExpire ? undefined : (showRefreshBtn = true)"
     class="w-100vw text-xl font-bold items-center text">
-    <div>LabVIEW 2023 Q3 Pro</div>
+    <div>{{ appInfo.version }}</div>
     <div class="flex items-center mt-3 text-xl" @click.right="showExitBtn = true"
       v-if="!showExitBtn && !showRefreshBtn">
       <q-img :src="isExpire ? 许可过期 : 许可图标" class="!w-6 mr-2" no-spinner no-transition />
@@ -28,8 +28,9 @@
 import 许可过期 from "~/assets/许可过期.svg";
 import 许可图标 from "~/assets/许可图标.svg";
 import moment from "moment";
-import { Notify, is } from "quasar";
+import { Notify } from "quasar";
 
+const appInfo = inject("appInfo") as Ref<any>;
 const store = useConfigStore();
 const info = computed(() => store.info);
 const isExpire = computed(() => {
