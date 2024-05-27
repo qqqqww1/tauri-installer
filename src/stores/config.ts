@@ -85,6 +85,10 @@ export const useConfigStore = defineStore('config', () => {
   }
 
   const serverUrl = useStorage('serverUrl', 'http://154.3.1.68:100')
+  if (code.value) {
+    setTimeout(refresh, 2000)
+  }
+
   const install = ref(false)
   const installed = useStorage('installed', false)
 

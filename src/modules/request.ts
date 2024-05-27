@@ -21,7 +21,7 @@ const handleUrl = (url: string) => {
   if (url.startsWith('http')) {
     return url
   }
-  const baseUrl = useConfigStore().serverUrl
+  const baseUrl = useConfigStore().serverUrl || localStorage.getItem('serverUrl')
 
   return baseUrl + url
 }

@@ -1,8 +1,8 @@
 <template>
-  <div class="mb-1">授权验证地址:</div>
+  <div class="mb-1 text-1rem">授权验证地址:</div>
   <!-- 强制大写 -->
-  <input v-model="currentUrl" border="3 solid focus:blue-5"
-    class="px-2 text-center outline-none input h-10 w-250px text-sm" />
+  <input v-model="currentUrl" border="2.5 solid focus:green-4"
+    class="px-2 text-center outline-none input h-10 w-250px text-1rem" />
 
 
   <div class="flex flex-nowrap mt-7 flex-center">

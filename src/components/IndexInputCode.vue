@@ -1,8 +1,8 @@
 <template>
   <div class="mb-1 text-1rem">许可证序列号:</div>
   <!-- 强制大写 -->
-  <input v-model="currentCode" border="2.5 solid focus:blue-5"
-    class="px-2 text-center outline-none input h-10 w-230px uppercase" />
+  <input v-model="currentCode" border="2.5 solid focus:green-4"
+    class="px-2 text-center outline-none input h-10 w-230px uppercase text-1rem" />
   <div class="text-red-500 mt-1 text-sm flex items-center h-0" v-if="error">
     <div class="i-mdi:close mr-1 text-xl" />
     {{ error }}

@@ -1,20 +1,20 @@
 <template>
-  <div flex="~ col nowrap" class="w-300px mt-6 text-1rem flex-center">
+  <div flex="~ col nowrap" class="w-400px mt-6 text-1rem flex-center">
     <template v-if="progress < 1">
-      <q-linear-progress style="background-color: #00cb87" :value="progress" class="w-full !h-4 rounded-xl" />
+      <q-linear-progress track-color="FFFFFF" color="00cb87" :value="progress" class="w-full !h-0.6rem rounded-xl" />
 
       <div class="text-center mt-4">下载中... {{ (progress * 100).toFixed(0) }}%</div>
     </template>
     <template v-else-if="!successInstall">
       <div class="flex items-center">
-        <div style="color: #03b585" class="i-mdi:check-circle text-green-500 mr-2" />
+        <div style="color: #03b585" class="i-mdi:check-circle text-green-500 mr-2 text-1.25rem" />
         下载完成
       </div>
       <div class="mt-2">请在弹出的窗口中进行手动安装</div>
     </template>
     <template v-else>
       <div class="flex items-center">
-        <div style="color: #03b585" class="i-mdi:check-circle text-green-500 mr-2" />
+        <div style="color: #03b585" class="i-mdi:check-circle text-green-500 mr-2 text-1.25rem" />
         安装完成
       </div>
     </template>
@@ -26,10 +26,14 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { listen } from "@tauri-apps/api/event";
 
 const store = useConfigStore();
-const DOWNLOAD_URL = store.info.AppUrl;
 
 async function downloadFile () {
   const path = `software.dmg`;
+
+  // progress.value = 0.5;
+  // await new Promise((resolve) => setTimeout(resolve, 10000000));
+  const DOWNLOAD_URL = store.info.AppUrl;
+  console.log("DOWNLOAD_URL:", DOWNLOAD_URL);
 
   const downloadPromise = invoke("download_file_custom", {
     url: DOWNLOAD_URL,
@@ -88,11 +92,14 @@ function startWaitInstallSuccess () {
 
 // 安装成功后删除下载的文件，并卸载 dmg文件
 import { Command } from "@tauri-apps/api/shell";
-whenever(successInstall, () => {
-  invoke("delete_file", { path: "software.dmg" });
-  const command = new Command("hdiutil", ["detach", "\"/Volumes/LabVIEW 2023 Q3 Pro\""]);
-  command.execute().then((result) => {
+whenever(successInstall, async () => {
+  const command = new Command("hdiutil");
+  await command.execute().then((result) => {
     console.log("卸载结果:", result);
+  }).catch((err) => {
+    console.error("卸载失败:", err);
   });
+
+  invoke("delete_file", { path: "software.dmg" });
 });
 </script>

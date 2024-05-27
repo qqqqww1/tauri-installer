@@ -8,8 +8,8 @@
       {{ isExpire ? "许可证已过期" : "已许可" }}
     </div>
     <div v-if="showExitBtn || isExpire">
-      <q-btn unelevated style="background-color: rgb(252, 72, 81) !important"
-        class="!rounded-xl !font-bold !px-8 !text-1.1rem !min-h-8 mt-2" text-color="white" label="停用许可证" ref="changeBtn"
+      <q-btn unelevated style="background-color: rgb(255, 83, 90) !important"
+        class="!rounded-xl !font-bold !px-8 !text-1.1rem !min-h-8 mt-3" text-color="white" label="停用许可证" ref="changeBtn"
         @click.stop="store.code = ''" />
     </div>
     <div v-else-if="showRefreshBtn">
@@ -49,7 +49,7 @@ watchEffect(() => {
   if (isExpire.value) {
     Notify.create({
       message: "许可证已过期，请您更换许可证",
-      color: "negative",
+      color: "red-12",
       position: "bottom-right",
       timeout: 10000,
     });
@@ -78,7 +78,7 @@ function toRefresh () {
     if (!e) return;
     Notify.create({
       message: "许可证信息刷新成功",
-      color: "positive",
+      color: "teal-5",
       position: "bottom-right",
       timeout: 5000,
     });

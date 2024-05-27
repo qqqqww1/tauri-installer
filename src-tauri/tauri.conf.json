@@ -13,7 +13,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "cc.polars.installer",
+      "identifier": "cn.com.iecube.labview",
       "icon": ["icons/logo.png"],
       "resources": [],
       "externalBin": [],
@@ -57,14 +57,15 @@
           },
           {
             "name": "hdiutil",
-            "cmd": "hdiutil"
+            "cmd": "hdiutil",
+            "args": ["detach", "/Volumes/LabVIEW 2023 Q3 Pro", "-force"]
           }
         ]
       }
     },
     "windows": [
       {
-        "title": "LabVIEW Installer",
+        "title": "许可证管理器",
         "width": 600,
         "height": 450,
         "minWidth": 600,
