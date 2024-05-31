@@ -109,7 +109,7 @@ export const useConfigStore = defineStore('config', () => {
     })
 
     console.log('result:', result)
-    const isInstalled = result.toLowerCase().includes('com.ni.labviewcore_x64_230')
+    const isInstalled = result.toLowerCase().includes('labview')
 
     console.log('isInstalled:', isInstalled)
     installed.value = isInstalled

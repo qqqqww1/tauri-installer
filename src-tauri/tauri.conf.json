@@ -52,8 +52,8 @@
         "scope": [
           {
             "name": "pkgutil",
-            "cmd": "pkgutil",
-            "args": ["--pkgs"]
+            "cmd": "ls",
+            "args": ["/Applications/National Instruments"]
           },
           {
             "name": "hdiutil",
